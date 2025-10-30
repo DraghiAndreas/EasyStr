@@ -168,6 +168,22 @@ char* EasyInsert(char* destination, char* source, const int location) {
     return;
 }
 
+char** memAlloc(char** newArr, char* origWord, const int len, const int wordCounter) {
+    if (newArr == NULL) {
+        newArr = (char**)malloc(sizeof(char*));
+        newArr[0] = (char*)malloc(sizeof(char) * (len));
+        memcpy(newArr[0], origWord, sizeof(char) * (len));
+        newArr[0][len] = '\0';
+    }
+    else {
+        newArr = (char**)realloc(newArr, sizeof(char*) * wordCounter);
+        newArr[wordCounter - 1] = (char*)malloc(sizeof(char) * (len));
+        memcpy(newArr[wordCounter - 1], origWord, sizeof(char) * (len));
+        newArr[wordCounter - 1][len] = '\0';
+    }
+    return newArr;
+}
+
 char ** EasySplit(char** newArr,const char* source,const char* sep , int* wordCounter)
 {
     const char* origSource = source;
@@ -191,18 +207,7 @@ char ** EasySplit(char** newArr,const char* source,const char* sep , int* wordCo
                 origSource++;
             }
             (*wordCounter)++;
-            if (newArr == NULL) {
-                newArr = (char**)malloc(sizeof(char*));
-                newArr[0] = (char*)malloc(sizeof(char) * (source - origWord - len));
-                memcpy(newArr[0], origWord, sizeof(char) * (source - origWord - len));
-                newArr[0][source - origWord - len] = '\0';
-            }
-            else {
-                newArr = (char**)realloc(newArr, sizeof(char*) * (*wordCounter));
-                newArr[(*wordCounter) -1] = (char*)malloc(sizeof(char) * (source - origWord - len));
-                memcpy(newArr[(*wordCounter) - 1], origWord, sizeof(char) * (source - origWord - len));
-                newArr[(*wordCounter) - 1][source - origWord - len] = '\0';
-            }
+            newArr = memAlloc(newArr, origWord, source - origWord - len, (*wordCounter));
             origWord = origSource;
         }
         else
@@ -211,18 +216,7 @@ char ** EasySplit(char** newArr,const char* source,const char* sep , int* wordCo
         }
         if (!*origSource) {
             (*wordCounter)++;
-            if (newArr == NULL) {
-                newArr = (char**)malloc(sizeof(char*));
-                newArr[0] = (char*)malloc(sizeof(char) * (origSource - origWord));
-                memcpy(newArr[0], origWord, sizeof(char) * (origSource - origWord));
-                newArr[0][origSource - origWord] = '\0';
-            }
-            else {
-                newArr = (char**)realloc(newArr, sizeof(char*) * (*wordCounter));
-                newArr[(*wordCounter) - 1] = (char*)malloc(sizeof(char) * (origSource - origWord));
-                memcpy(newArr[(*wordCounter) - 1], origWord, sizeof(char) * (origSource - origWord));
-                newArr[(*wordCounter) - 1][origSource - origWord] = '\0';
-            }
+            newArr = memAlloc(newArr, origWord, origSource - origWord, (*wordCounter));
         }
         source = origSource;
         sep = origSep;
