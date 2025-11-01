@@ -8,12 +8,9 @@ typedef enum {AL,DG,AN,UP,LOW,SPACE} CHR_MODE;
 void efSwap(char* v1, char* v2);
 
 // INTS
-//--------// EasyLen, EasyCmp, EasyNCmp, EasyCount, EasyStrCount,EasyIsLet | TODO : Replace IsLet - IsAlpha, IsDigit, IsAlnum, IsUpper/Lower, isSpace
+//--------// EasyLen, EasyCmp, EasyNCmp, EasyCount, EasyStrCount ,IsAlpha, IsDigit, IsAlnum, IsUpper/Lower, isSpace, EasyStartsWith|
 
-//IS LETTER
-
-
-static int IsGeneralCaseChr(const char c, CHR_MODE mode) {
+int IsGeneralCaseChr(const char c, CHR_MODE mode) {
     switch (mode) {
         case AL:
             return ((c | 0x20) >= 'a' && (c | 0x20) <= 'z');
@@ -30,9 +27,10 @@ static int IsGeneralCaseChr(const char c, CHR_MODE mode) {
         default:
             return  0;
     }
+    return 0;
 }
 
-static  int IsGeneralCaseStr(const char * c, CHR_MODE mode) {
+int IsGeneralCaseStr(const char * c, CHR_MODE mode) {
     if (!*c || !c) return 0;
     while (*c) {
         switch (mode) {
@@ -67,24 +65,36 @@ static  int IsGeneralCaseStr(const char * c, CHR_MODE mode) {
     return 1;
 }
 
-inline int EasyIsAlphaChr(const char c) {return  IsGeneralCaseChr(c,AL);}
-inline int EasyIsDigitChr(const char c) {return  IsGeneralCaseChr(c,DG);}
-inline int EasyIsAlnumChr(const char c) {return  IsGeneralCaseChr(c,AN);}
-inline int EasyIsUpperChr(const char c) {return  IsGeneralCaseChr(c,UP);}
-inline int EasyIsLowerChr(const char c) {return  IsGeneralCaseChr(c,LOW);}
-inline int EasyIsSpaceChr(const char c) {return  IsGeneralCaseChr(c,SPACE);}
+int EasyIsAlphaChr(const char c) {return  IsGeneralCaseChr(c,AL);}
+int EasyIsDigitChr(const char c) {return  IsGeneralCaseChr(c,DG);}
+int EasyIsAlnumChr(const char c) {return  IsGeneralCaseChr(c,AN);}
+int EasyIsUpperChr(const char c) {return  IsGeneralCaseChr(c,UP);}
+int EasyIsLowerChr(const char c) {return  IsGeneralCaseChr(c,LOW);}
+int EasyIsSpaceChr(const char c) {return  IsGeneralCaseChr(c,SPACE);}
 
-int EasyIsAlphaStr(const char * c) {return  IsGeneralCaseStr(*c,AL);}
-int EasyIsDigitStr(const char * c) {return  IsGeneralCaseStr(*c,DG);}
-int EasyIsAlnumStr(const char * c) {return  IsGeneralCaseStr(*c,AN);}
-int EasyIsUpperStr(const char * c) {return  IsGeneralCaseStr(*c,UP);}
-int EasyIsLowerStr(const char * c) {return  IsGeneralCaseStr(*c,LOW);}
-int EasyIsSpaceStr(const char * c) {return  IsGeneralCaseStr(*c,SPACE);}
+int EasyIsAlphaStr(const char * c) {return  IsGeneralCaseStr(c,AL);}
+int EasyIsDigitStr(const char * c) {return  IsGeneralCaseStr(c,DG);}
+int EasyIsAlnumStr(const char * c) {return  IsGeneralCaseStr(c,AN);}
+int EasyIsUpperStr(const char * c) {return  IsGeneralCaseStr(c,UP);}
+int EasyIsLowerStr(const char * c) {return  IsGeneralCaseStr(c,LOW);}
+int EasyIsSpaceStr(const char * c) {return  IsGeneralCaseStr(c,SPACE);}
 
 //--------------------------------------------//
 
+int EasyStartsWith(const char * string, const char * prefix) {
+    while (*prefix) {
+        if (*string != *prefix) return 0;
+        string++;
+        prefix++;
+    }
+    return 1;
+}
+
 int EasyLen(const char* string) {
     char* p = string;
+
+    if (!*string) return 0;
+
     while (*string) {
         string++;
     }
@@ -97,6 +107,16 @@ int EasyCmp(const char* string1, const char* string2) {
         string2++;
     }
     return ((*string1) == '\0' && (*string2) == '\0');
+}
+
+int EasyEndsWith(const char * string, const char * sufix) {
+    const size_t string_len = EasyLen(string);
+    const size_t sufix_len = EasyLen(sufix);
+
+    if (!*string || !*sufix) return 0;
+    if (sufix_len > string_len) return 0;
+
+    return (EasyCmp(string+(string_len-sufix_len),sufix));
 }
 
 int EasyNCmp(const char* string1, const char* string2, int n) {
@@ -142,14 +162,10 @@ int EasyStrCount(const char* string, const char* c) {
 }
 
 
-int EasyIsLetChr(const char c) {
-    return ((c | 0x20) >= 'a' && (c | 0x20) <= 'z');
-}
-
 
 // CHAR* 
 //--------// EasyCpy, EasyNCpy, EasyCat, EasyUpper, EasyLower, EasyRev, EasySplit, EasySwapcase, EasyCapitalize,
-//EasyInsert, EasyNCat , EasySearchChr, EasyRSearchChr, EasySearchStr, EasyRSearchStr| TODO : EasyStrip
+//EasyInsert, EasyNCat , EasySearchChr, EasyRSearchChr, EasySearchStr, EasyRSearchStr| TODO : EasyTrim (L+R), EasyReplace, EasyJoin
 
 
 char * EasyRSearchStr(const char* string, const char* c) {
@@ -395,17 +411,11 @@ int main() {
     char** arr = NULL;
     int words;
 
+    printf("%d", EasyEndsWith("this is a test","test"));
+
+
     int test;
-    printf("%d",EasyIsLetChr(text4[3]));
 }
-
-
-
-
-
-
-
-
 
 //Extra
 void efSwap(char* v1, char* v2) {
