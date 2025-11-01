@@ -256,6 +256,8 @@ int main() {
     char** arr = NULL;
     int words;
 
+    int test;
+
     EasyRev(text5);
     printf("%s", text5);
 }
