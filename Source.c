@@ -2,13 +2,86 @@
 #include <stdlib.h>
 #include <string.h>
 //EXTRA
-typedef enum {UPPER,LOWER,CAP,SWAP}STRING_MODE;
+typedef enum {UPPER,LOWER,CAP,SWAP} STRING_MODE;
+typedef enum {AL,DG,AN,UP,LOW,SPACE} CHR_MODE;
 
 void efSwap(char* v1, char* v2);
 
 // INTS
-//--------// EasyLen, EasyCmp, EasyNCmp, EasyCount, EasyStrCount,EasyIsLet | TODO : 
+//--------// EasyLen, EasyCmp, EasyNCmp, EasyCount, EasyStrCount,EasyIsLet | TODO : Replace IsLet - IsAlpha, IsDigit, IsAlnum, IsUpper/Lower, isSpace
 
+//IS LETTER
+
+
+static int IsGeneralCaseChr(const char c, CHR_MODE mode) {
+    switch (mode) {
+        case AL:
+            return ((c | 0x20) >= 'a' && (c | 0x20) <= 'z');
+        case DG:
+            return (c >= '0' && c <= '9');
+        case AN:
+            return (IsGeneralCaseChr(c,AL) || IsGeneralCaseChr(c,DG));
+        case UP:
+            return (c >= 'A' && c <= 'Z');
+        case LOW:
+            return (c >= 'a' && c <= 'z');
+        case SPACE:
+            return  c == ' ';
+        default:
+            return  0;
+    }
+}
+
+static  int IsGeneralCaseStr(const char * c, CHR_MODE mode) {
+    if (!*c || !c) return 0;
+    while (*c) {
+        switch (mode) {
+            case AL:
+                if ((*c | 0x20) >= 'a' && (*c | 0x20) <= 'z')c++;
+                else return 0;
+                break;
+            case DG:
+                if (*c >= '0' && *c <= '9')c++;
+                else return 0;
+                break;
+            case AN:
+                if (IsGeneralCaseChr(*c,AL) || IsGeneralCaseChr(*c,DG))c++;
+                else return 0;
+                break;
+            case UP:
+                if (*c >= 'A' && *c <= 'Z')c++;
+                else return 0;
+                break;
+            case LOW:
+                if (*c >= 'a' && *c <= 'z')c++;
+                else return 0;
+                break;
+            case SPACE:
+                if (*c == ' ')c++;
+                else return 0;
+                break;
+            default:
+                return 0;
+        }
+    }
+    return 1;
+}
+
+inline int EasyIsAlphaChr(const char c) {return  IsGeneralCaseChr(c,AL);}
+inline int EasyIsDigitChr(const char c) {return  IsGeneralCaseChr(c,DG);}
+inline int EasyIsAlnumChr(const char c) {return  IsGeneralCaseChr(c,AN);}
+inline int EasyIsUpperChr(const char c) {return  IsGeneralCaseChr(c,UP);}
+inline int EasyIsLowerChr(const char c) {return  IsGeneralCaseChr(c,LOW);}
+inline int EasyIsSpaceChr(const char c) {return  IsGeneralCaseChr(c,SPACE);}
+
+int EasyIsAlphaStr(const char * c) {return  IsGeneralCaseStr(*c,AL);}
+int EasyIsDigitStr(const char * c) {return  IsGeneralCaseStr(*c,DG);}
+int EasyIsAlnumStr(const char * c) {return  IsGeneralCaseStr(*c,AN);}
+int EasyIsUpperStr(const char * c) {return  IsGeneralCaseStr(*c,UP);}
+int EasyIsLowerStr(const char * c) {return  IsGeneralCaseStr(*c,LOW);}
+int EasyIsSpaceStr(const char * c) {return  IsGeneralCaseStr(*c,SPACE);}
+
+//--------------------------------------------//
 
 int EasyLen(const char* string) {
     char* p = string;
@@ -68,15 +141,81 @@ int EasyStrCount(const char* string, const char* c) {
     return count;
 }
 
-int EasyIsLet(const char* c) {
-    return ((*c | 0x20) >= 'a' && (*c | 0x20) <= 'z');
+
+int EasyIsLetChr(const char c) {
+    return ((c | 0x20) >= 'a' && (c | 0x20) <= 'z');
 }
 
 
 // CHAR* 
-//--------// EasyCpy, EasyNCpy, EasyCat, EasyUpper, EasyLower, EasyRev, EasySplit, EasySwapcase, EasyCapitalize, EasyInsert  | TODO : EasyNCat,
-//EasySearchChr, EasyRSearchChr, EasySearchStr, EasyRSearchStr
+//--------// EasyCpy, EasyNCpy, EasyCat, EasyUpper, EasyLower, EasyRev, EasySplit, EasySwapcase, EasyCapitalize,
+//EasyInsert, EasyNCat , EasySearchChr, EasyRSearchChr, EasySearchStr, EasyRSearchStr| TODO : EasyStrip
 
+
+char * EasyRSearchStr(const char* string, const char* c) {
+    const char * pointer = string;
+    const char * oc = c;
+    const char * la = NULL;
+
+    if (!*c) return NULL;
+
+    while (*string) {
+        while (*string == *c && *c) {
+            string++;
+            c++;
+        }
+        if (!*c) {
+            printf("UPDATE\n");
+            la = string - (c - oc);
+        }
+        pointer++;
+        string = pointer;
+        c = oc;
+    }
+    return la;
+}
+
+char * EasySearchStr(const char* string, const char* c) {
+    const char * pointer = string;
+    const char * oc = c;
+
+    if (!*c) return NULL;
+
+    while (*string) {
+        while (*string == *c && *c) {
+            string++;
+            c++;
+        }
+        if (!*c) {
+            return string - (c - oc);
+        } else {
+            pointer++;
+            string = pointer;
+            c = oc;
+        }
+    }
+    return  NULL;
+}
+
+
+char *EasyRSearchChr(char *string, const char c) {
+    char *lastPos = NULL;
+    while (*string) {
+        if (*string == c)
+            lastPos = string;
+        string++;
+    }
+    return lastPos;
+}
+
+char *EasySearchChr(char *string, const char c) {
+    while (*string) {
+        if (*string == c)
+            return string;
+        string++;
+    }
+    return NULL;
+}
 
 char* EasyCpy(char* destination, const char* source) {
     char* orig = destination;
@@ -140,12 +279,12 @@ char* GeneralCase(char* destination, STRING_MODE MODE) {
             }
             break;
         case SWAP:
-            if (EasyIsLet(destination)){
+            if (EasyIsAlphaChr(*destination)){
                 *destination ^= 0x20;
             }
             break;
         case CAP:
-            if (EasyIsLet(destination)) {
+            if (EasyIsAlphaChr(*destination)) {
                 if (!flag) {
                     *destination &= ~(0x20);
                     flag = 1;
@@ -257,9 +396,7 @@ int main() {
     int words;
 
     int test;
-
-    EasyRev(text5);
-    printf("%s", text5);
+    printf("%d",EasyIsLetChr(text4[3]));
 }
 
 
