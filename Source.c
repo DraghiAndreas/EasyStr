@@ -6,7 +6,7 @@
 typedef enum {UPPER,LOWER,CAP,SWAP} STRING_MODE;
 typedef enum {AL,DG,AN,UP,LOW,SPACE} CHR_MODE;
 typedef enum {RIGHT, LEFT, BOTH} TRIM_MODE  ;
-void efSwap(char* v1, char* v2);
+static void efSwap(char* v1, char* v2);
 
 // INTS
 //--------// EasyLen, EasyCmp, EasyNCmp, EasyCount, EasyStrCount ,IsAlpha, IsDigit, IsAlnum, IsUpper/Lower, isSpace, EasyStartsWith|
@@ -492,26 +492,40 @@ char * EasyJoin(char ** strings, size_t count, char * sep) {
         return newString;
     }
 
+    unsigned int null_terms = 0;
     size_t length = 0;
     size_t sepLength = EasyLen(sep);
     for (int i = 0; i < count; i++) {
-        length += EasyLen(strings[i]);
+        if (strings[i]) {
+            length += EasyLen(strings[i]);
+        } else {
+            null_terms++;
+        }
     }
-    length += sepLength * (count-1);
-
-    char * newString = (char*)malloc(length + 1);
+    length += sepLength * (count-null_terms-1);
+    printf("Calculated length: %zu\n", length);
+    char * newString = (char*)malloc(length+1);
     if (!newString) return NULL;
 
     char *dest = newString;
 
+    _Bool first = true;
+
     for (int i = 0; i < count; i++) {
-        size_t wordLen = EasyLen(strings[i]);
-        memcpy(dest,strings[i],wordLen);
-        dest += wordLen;
-        if (i < count - 1) {
+
+        if (!strings[i]) {
+            continue;
+        }
+
+        if (!first) {
             memcpy(dest,sep,sepLength);
             dest += sepLength;
         }
+
+        size_t wordLen = EasyLen(strings[i]);
+        memcpy(dest,strings[i],wordLen);
+        dest += wordLen;
+        first = false;
     }
     newString[length] = '\0';
 
@@ -520,13 +534,13 @@ char * EasyJoin(char ** strings, size_t count, char * sep) {
 
 //This is a test
 int main() {
-    char * test[] = {"This","is",NULL,"test"};
-    char * new = EasyJoin(test,4,"");
+    char* words[] = {"hello", "world", NULL};
+    char * new = EasyJoin(words, 3, "..., ");
     printf("%s\n",new);
 }
 
 //Extra
-void efSwap(char* v1, char* v2) {
+static void efSwap(char* v1, char* v2) {
     *v1 = *v1 ^ *v2;
     *v2 = *v1 ^ *v2;
     *v1 = *v1 ^ *v2;
