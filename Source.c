@@ -7,11 +7,10 @@ typedef enum {UPPER,LOWER,CAP,SWAP} STRING_MODE;
 typedef enum {AL,DG,AN,UP,LOW,SPACE} CHR_MODE;
 typedef enum {RIGHT, LEFT, BOTH} TRIM_MODE  ;
 static void efSwap(char* v1, char* v2);
-
 // INTS
 //--------// EasyLen, EasyCmp, EasyNCmp, EasyCount, EasyStrCount ,IsAlpha, IsDigit, IsAlnum, IsUpper/Lower, isSpace, EasyStartsWith|
 
-static int IsGeneralCaseChr(const char c, CHR_MODE mode) {
+static int IsGeneralCaseChr(const unsigned char c, CHR_MODE mode) {
     switch (mode) {
         case AL:
             return ((c | 0x20) >= 'a' && (c | 0x20) <= 'z');
@@ -28,50 +27,23 @@ static int IsGeneralCaseChr(const char c, CHR_MODE mode) {
         default:
             return  0;
     }
-    return 0;
 }
 
 static int IsGeneralCaseStr(const char * c, CHR_MODE mode) {
-    if (!*c || !c) return 0;
+    if (!c || !*c) return 0;
     while (*c) {
-        switch (mode) {
-            case AL:
-                if ((*c | 0x20) >= 'a' && (*c | 0x20) <= 'z')c++;
-                else return 0;
-                break;
-            case DG:
-                if (*c >= '0' && *c <= '9')c++;
-                else return 0;
-                break;
-            case AN:
-                if (IsGeneralCaseChr(*c,AL) || IsGeneralCaseChr(*c,DG))c++;
-                else return 0;
-                break;
-            case UP:
-                if (*c >= 'A' && *c <= 'Z')c++;
-                else return 0;
-                break;
-            case LOW:
-                if (*c >= 'a' && *c <= 'z')c++;
-                else return 0;
-                break;
-            case SPACE:
-                if (*c == ' ')c++;
-                else return 0;
-                break;
-            default:
-                return 0;
-        }
+       if (!IsGeneralCaseChr((unsigned char)*c, mode)) return 0;
+        c++;
     }
     return 1;
 }
 
-int EasyIsAlphaChr(const char c) {return  IsGeneralCaseChr(c,AL);}
-int EasyIsDigitChr(const char c) {return  IsGeneralCaseChr(c,DG);}
-int EasyIsAlnumChr(const char c) {return  IsGeneralCaseChr(c,AN);}
-int EasyIsUpperChr(const char c) {return  IsGeneralCaseChr(c,UP);}
-int EasyIsLowerChr(const char c) {return  IsGeneralCaseChr(c,LOW);}
-int EasyIsSpaceChr(const char c) {return  IsGeneralCaseChr(c,SPACE);}
+int EasyIsAlphaChr(const unsigned char c) {return  IsGeneralCaseChr(c,AL);}
+int EasyIsDigitChr(const unsigned char c) {return  IsGeneralCaseChr(c,DG);}
+int EasyIsAlnumChr(const unsigned char c) {return  IsGeneralCaseChr(c,AN);}
+int EasyIsUpperChr(const unsigned char c) {return  IsGeneralCaseChr(c,UP);}
+int EasyIsLowerChr(const unsigned char c) {return  IsGeneralCaseChr(c,LOW);}
+int EasyIsSpaceChr(const unsigned char c) {return  IsGeneralCaseChr(c,SPACE);}
 
 int EasyIsAlphaStr(const char * c) {return  IsGeneralCaseStr(c,AL);}
 int EasyIsDigitStr(const char * c) {return  IsGeneralCaseStr(c,DG);}
@@ -83,6 +55,7 @@ int EasyIsSpaceStr(const char * c) {return  IsGeneralCaseStr(c,SPACE);}
 //--------------------------------------------//
 
 int EasyStartsWith(const char * string, const char * prefix) {
+    if (!string || !prefix) return 0;
     while (*prefix) {
         if (*string != *prefix) return 0;
         string++;
@@ -91,10 +64,10 @@ int EasyStartsWith(const char * string, const char * prefix) {
     return 1;
 }
 
-int EasyLen(const char* string) {
-    char* p = string;
+size_t EasyLen(const char* string) {
+    if (!string || !*string) return 0;
 
-    if (!*string) return 0;
+    const char* p = string;
 
     while (*string) {
         string++;
@@ -103,6 +76,7 @@ int EasyLen(const char* string) {
 }
 
 int EasyCmp(const char* string1, const char* string2) {
+    if (!string1 || !string2) return 0;
     while ((*string1 == *string2) && *string1) {
         string1++;
         string2++;
@@ -110,38 +84,42 @@ int EasyCmp(const char* string1, const char* string2) {
     return ((*string1) == '\0' && (*string2) == '\0');
 }
 
-int EasyEndsWith(const char * string, const char * sufix) {
+int EasyEndsWith(const char * string, const char * suffix) {
+    if (!string || !suffix || !*string || !*string) return 0;
+
     const size_t string_len = EasyLen(string);
-    const size_t sufix_len = EasyLen(sufix);
+    const size_t suffix_len = EasyLen(suffix);
 
-    if (!*string || !*sufix) return 0;
-    if (sufix_len > string_len) return 0;
+    if (suffix_len > string_len) return 0;
 
-    return (EasyCmp(string+(string_len-sufix_len),sufix));
+    return (EasyCmp(string+(string_len-suffix_len),suffix));
 }
 
 int EasyNCmp(const char* string1, const char* string2, int n) {
+    if (!string1 || !string2 || n <= 0) return 0;
     while ((*string1 == *string2) && *string1 && n) {
         string1++;
         string2++;
         n--;
     }
-    return(*string1 == *string2);
+    return(n==0 || *string1 == *string2);
 }
 
-int EasyCount(const char* string, const char c) {
-    int count = 0;
-    while (*string++) {
+size_t EasyCount(const char* string, const char c) {
+    if (!string || !c) return 0;
+    size_t count = 0;
+    while (*string) {
         if (*string == c) {
             count++;
         }
+        string++;
     }
     return count;
 }
 
-int EasyStrCount(const char* string, const char* c) {
-    int count = 0, len = EasyLen(c);
-
+size_t EasyStrCount(const char* string, const char* c) {
+    if (!string || !c || !*c) return 0;
+    size_t count = 0;
     while (*string) {
         const char* s = string;
         const char* sub = c;
@@ -151,9 +129,9 @@ int EasyStrCount(const char* string, const char* c) {
             sub++;
         }
 
-        if (*sub == '\0') {
+        if (!*sub) {
             count++;
-            string += len;
+            string += sub-c;
         }
         else {
             string++;
@@ -163,24 +141,25 @@ int EasyStrCount(const char* string, const char* c) {
 }
 
 
-
+//memmove(
 // CHAR* 
 //--------// EasyCpy, EasyNCpy, EasyCat, EasyUpper, EasyLower, EasyRev, EasySplit, EasySwapcase, EasyCapitalize,
 //EasyInsert, EasyNCat , EasySearchChr, EasyRSearchChr, EasySearchStr, EasyRSearchStr, EasyTrim (L+R), EasyStrDupe| TODO : EasyReplace, EasyJoin
 
 char * EasyStrDup(const char * string) {
+    if (!string) return NULL;
     size_t len = EasyLen(string);
     char * newString = (char*)malloc(len + 1);
     if (!newString) return NULL;
-    memmove(newString, string, len+1);
+    memcpy(newString, string, len+1);
     return newString;
 }
-
 
 static char *  GeneralTrim(const char * string, TRIM_MODE MODE) {
 
     if (!string || !*string) return NULL;
-    if (EasyIsSpaceStr(string)) {
+
+    if (!*string || EasyIsSpaceStr(string)) {
         char *newString = (char*)malloc(1);
         if (!newString) return NULL;
         newString[0] = '\0';
@@ -210,9 +189,9 @@ static char *  GeneralTrim(const char * string, TRIM_MODE MODE) {
     return newString;
 }
 
-char * EasyRTrim(const char * string) {GeneralTrim(string,RIGHT);}
-char * EasyLTrim(const char * string) {GeneralTrim(string,LEFT);}
-char * EasyTrim(const char * string) {GeneralTrim(string,BOTH);}
+char * EasyRTrim(const char * string) {return GeneralTrim(string,RIGHT);}
+char * EasyLTrim(const char * string) {return GeneralTrim(string,LEFT);}
+char * EasyTrim(const char * string) {return GeneralTrim(string,BOTH);}
 
 
 char * EasyRSearchStr(const char* string, const char* c) {
@@ -534,9 +513,8 @@ char * EasyJoin(char ** strings, size_t count, char * sep) {
 
 //This is a test
 int main() {
-    char* words[] = {"hello", "world", NULL};
-    char * new = EasyJoin(words, 3, "..., ");
-    printf("%s\n",new);
+    char text[] = "This test is a test.";
+    printf("%d",EasyStrCount(text,"test"));
 }
 
 //Extra
