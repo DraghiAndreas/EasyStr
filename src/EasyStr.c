@@ -1,4 +1,4 @@
-#include "EasyStr.h"
+#include "../include/EasyStr.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
