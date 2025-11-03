@@ -1,14 +1,17 @@
+#include "EasyStr.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//EXTRA
-typedef enum {UPPER,LOWER,CAP,SWAP} STRING_MODE;
-typedef enum {AL,DG,AN,UP,LOW,SPACE} CHR_MODE;
-typedef enum {RIGHT, LEFT, BOTH} TRIM_MODE  ;
-static void efSwap(char* v1, char* v2);
-// INTS
-//--------// EasyLen, EasyCmp, EasyNCmp, EasyCount, EasyStrCount ,IsAlpha, IsDigit, IsAlnum, IsUpper/Lower, isSpace, EasyStartsWith|
+
+static void efSwap(char* v1, char* v2) {
+    if (v1==v2)return;
+    *v1 = *v1 ^ *v2;
+    *v2 = *v1 ^ *v2;
+    *v1 = *v1 ^ *v2;
+}
+
+//-----
 
 static int IsGeneralCaseChr(const unsigned char c, CHR_MODE mode) {
     switch (mode) {
@@ -52,8 +55,6 @@ int EasyIsUpperStr(const char * c) {return  IsGeneralCaseStr(c,UP);}
 int EasyIsLowerStr(const char * c) {return  IsGeneralCaseStr(c,LOW);}
 int EasyIsSpaceStr(const char * c) {return  IsGeneralCaseStr(c,SPACE);}
 
-//--------------------------------------------//
-
 int EasyStartsWith(const char * string, const char * prefix) {
     if (!string || !prefix) return 0;
     while (*prefix) {
@@ -84,17 +85,6 @@ int EasyCmp(const char* string1, const char* string2) {
     return ((*string1) == '\0' && (*string2) == '\0');
 }
 
-int EasyEndsWith(const char * string, const char * suffix) {
-    if (!string || !suffix || !*string || !*string) return 0;
-
-    const size_t string_len = EasyLen(string);
-    const size_t suffix_len = EasyLen(suffix);
-
-    if (suffix_len > string_len) return 0;
-
-    return (EasyCmp(string+(string_len-suffix_len),suffix));
-}
-
 int EasyNCmp(const char* string1, const char* string2, int n) {
     if (!string1 || !string2 || n <= 0) return 0;
     while ((*string1 == *string2) && *string1 && n) {
@@ -104,6 +94,19 @@ int EasyNCmp(const char* string1, const char* string2, int n) {
     }
     return(n==0 || *string1 == *string2);
 }
+
+int EasyEndsWith(const char * string, const char * suffix) {
+    if (!string || !suffix || !*string ) return 0;
+    if (!*suffix) return 1;
+
+    const size_t string_len = EasyLen(string);
+    const size_t suffix_len = EasyLen(suffix);
+
+    if (suffix_len > string_len) return 0;
+
+    return (EasyCmp(string+(string_len-suffix_len),suffix));
+}
+
 
 size_t EasyCount(const char* string, const char c) {
     if (!string || !c) return 0;
@@ -140,11 +143,8 @@ size_t EasyStrCount(const char* string, const char* c) {
     return count;
 }
 
+//----
 
-//memmove(
-// CHAR* 
-//--------// EasyCpy, EasyNCpy, EasyCat, EasyUpper, EasyLower, EasyRev, EasySplit, EasySwapcase, EasyCapitalize,
-//EasyInsert, EasyNCat , EasySearchChr, EasyRSearchChr, EasySearchStr, EasyRSearchStr, EasyTrim (L+R), EasyStrDupe| TODO : EasyReplace, EasyJoin
 
 char * EasyStrDup(const char * string) {
     if (!string) return NULL;
@@ -157,7 +157,7 @@ char * EasyStrDup(const char * string) {
 
 static char *  GeneralTrim(const char * string, TRIM_MODE MODE) {
 
-    if (!string || !*string) return NULL;
+    if (!string) return NULL;
 
     if (!*string || EasyIsSpaceStr(string)) {
         char *newString = (char*)malloc(1);
@@ -195,11 +195,11 @@ char * EasyTrim(const char * string) {return GeneralTrim(string,BOTH);}
 
 
 char * EasyRSearchStr(const char* string, const char* c) {
+    if (!string || !c || !*c) return NULL;
+
     const char * pointer = string;
     const char * oc = c;
     const char * la = NULL;
-
-    if (!*c) return NULL;
 
     while (*string) {
         while (*string == *c && *c) {
@@ -207,21 +207,21 @@ char * EasyRSearchStr(const char* string, const char* c) {
             c++;
         }
         if (!*c) {
-            printf("UPDATE\n");
             la = string - (c - oc);
         }
         pointer++;
         string = pointer;
         c = oc;
     }
-    return la;
+    return (char*)la;
 }
 
 char * EasySearchStr(const char* string, const char* c) {
+
+    if (!string || !c || !*c) return NULL;
+
     const char * pointer = string;
     const char * oc = c;
-
-    if (!*c) return NULL;
 
     while (*string) {
         while (*string == *c && *c) {
@@ -229,7 +229,7 @@ char * EasySearchStr(const char* string, const char* c) {
             c++;
         }
         if (!*c) {
-            return string - (c - oc);
+            return (char*)(string - (c - oc));
         } else {
             pointer++;
             string = pointer;
@@ -241,6 +241,7 @@ char * EasySearchStr(const char* string, const char* c) {
 
 
 char *EasyRSearchChr(char *string, const char c) {
+    if (!string || !c) return NULL;
     char *lastPos = NULL;
     while (*string) {
         if (*string == c)
@@ -251,6 +252,7 @@ char *EasyRSearchChr(char *string, const char c) {
 }
 
 char *EasySearchChr(char *string, const char c) {
+    if (!string || !c) return NULL;
     while (*string) {
         if (*string == c)
             return string;
@@ -260,6 +262,7 @@ char *EasySearchChr(char *string, const char c) {
 }
 
 char* EasyCpy(char* destination, const char* source) {
+    if (!destination || !source) return NULL;
     char* orig = destination;
     while (*source) {
         *destination++ = *source++;
@@ -268,18 +271,24 @@ char* EasyCpy(char* destination, const char* source) {
     return orig;
 }
 
-char* EasyNCpy(char* destination, const char* source, int n) {
-    if (n <= 0) return destination;
+char* EasyNCpy(char* destination, const char* source, size_t n) {
+    if (!destination || !source || !n) return NULL;
+
     char* orig = destination;
+
     while (*source && n > 0) {
         *destination++ = *source++;
         n--;
     }
-    memset(destination, '\0', n);
+    if (n>0) {
+        memset(destination, '\0', n);
+    }
+
     return orig;
 }
 
-char* EasyCat(char* destination, char* source) {
+char* EasyCat(char* destination,const char* source) {
+    if (!destination || !source) return NULL;
     char* orig = destination;
     while (*destination) {
         destination++;
@@ -291,7 +300,10 @@ char* EasyCat(char* destination, char* source) {
     return orig;
 }
 
-char* EasyNCat(char* destination, char* source, int n) {
+char* EasyNCat(char* destination,const char* source, size_t n) {
+    if (!destination || !source) return NULL;
+    if (n == 0) return destination;
+
     char* orig = destination;
     while (*destination) {
         destination++;
@@ -305,6 +317,8 @@ char* EasyNCat(char* destination, char* source, int n) {
 }
 
 char* GeneralCase(char* destination, STRING_MODE MODE) {
+    if (!destination) return NULL;
+
     char* orig = destination;
     _Bool flag = 0;
     while (*destination) {
@@ -350,44 +364,49 @@ char* EasySwapcase(char* dest) { return GeneralCase(dest, SWAP); }
 char* EasyCapitalize(char* dest) { return GeneralCase(dest, CAP); }
 
 char* EasyRev(char* string) {
-    int len = EasyLen(string);
+    if (!string) return NULL;
+    size_t len = EasyLen(string);
     char* orig = string;
-    for (int i = 0; i < len / 2; i++) {
+    for (size_t i = 0; i < len / 2; i++) {
         efSwap(string + i, string + len - i - 1);
     }
     return  orig;
 }
 
-char* EasyInsert(char* destination, char* source, int location) {
-    char* temp = malloc(sizeof(char)*(EasyLen(destination)+EasyLen(source)+1));
-    EasyNCpy(temp, destination, location);
-    temp[location] = '\0';
-    EasyCat(temp, source);
-    EasyCat(temp, destination + location);
-    EasyCpy(destination, temp);
-    free(temp);
-    return destination;
+char* EasyInsert(const char* destination, const char* source, size_t location) {
+    if (!destination || !source) return NULL;
+
+    size_t origLen = EasyLen(destination);
+    size_t len = EasyLen(source);
+
+    char* newString = malloc(sizeof(char)*(origLen+len+1));
+
+    EasyNCpy(newString, destination, location);
+    newString[location] = '\0';
+
+    EasyCat(newString, source);
+    EasyCat(newString, destination + location);
+
+    return newString;
 }
 
-char** memAlloc(char** newArr, char* origWord, const int len, const int wordCounter) {
-    if (newArr == NULL) {
-        newArr = (char**)malloc(sizeof(char*));
-        newArr[0] = (char*)malloc(sizeof(char) * (len));
-        memcpy(newArr[0], origWord, sizeof(char) * (len));
-        newArr[0][len] = '\0';
-    }
-    else {
-        newArr = (char**)realloc(newArr, sizeof(char*) * wordCounter);
-        newArr[wordCounter - 1] = (char*)malloc(sizeof(char) * (len));
-        memcpy(newArr[wordCounter - 1], origWord, sizeof(char) * (len));
-        newArr[wordCounter - 1][len] = '\0';
-    }
+static char** memAlloc(char** newArr, char* origWord, const size_t len, const size_t wordCounter) {
+
+    char** temp = (char**)realloc(newArr, sizeof(char*) * wordCounter);
+    if (temp == NULL) return NULL;
+    newArr = temp;
+
+    newArr[wordCounter - 1] = (char*)malloc(sizeof(char) * (len+1));
+    if (newArr[wordCounter - 1] == NULL) return NULL;
+
+    memcpy(newArr[wordCounter - 1], origWord, sizeof(char) * (len));
+    newArr[wordCounter - 1][len] = '\0';
     return newArr;
 }
-
-char** EasySplit(char** newArr, const char* source, const char* sep, int* wordCounter)
+char** EasySplit(char** newArr, const char* source, const char* sep, size_t* wordCounter)
 {
-    
+    if (source == NULL || sep == NULL || wordCounter == NULL) return NULL;
+
     const char* origWord = source;
     const char* origSource = source;
     const char* origSep = sep;
@@ -431,7 +450,7 @@ char * EasyReplace(const char * string, const char * old, const char * new) {
     if (!string || !old || !new) return NULL;
     if (!*old) return EasyStrDup(string);
 
-    const unsigned int count = EasyStrCount(string, old);
+    const size_t count = EasyStrCount(string, old);
     if (count == 0) return EasyStrDup(string);
 
     size_t lenOld = EasyLen(old);
@@ -447,7 +466,7 @@ char * EasyReplace(const char * string, const char * old, const char * new) {
     const char * src = string;
     const char * pos;
 
-    while (pos = EasySearchStr(src,old)) {
+    while ((pos = EasySearchStr(src,old))) {
         size_t len = pos - src;
         memcpy(dest,src,len);
         dest += len;
@@ -467,14 +486,15 @@ char * EasyJoin(char ** strings, size_t count, char * sep) {
     if (!strings || !sep) return NULL;
     if (!count) {
         char * newString = malloc(1);
+        if (!newString) return NULL;
         newString[0] = '\0';
         return newString;
     }
 
-    unsigned int null_terms = 0;
+    size_t null_terms = 0;
     size_t length = 0;
     size_t sepLength = EasyLen(sep);
-    for (int i = 0; i < count; i++) {
+    for (size_t i = 0; i < count; i++) {
         if (strings[i]) {
             length += EasyLen(strings[i]);
         } else {
@@ -482,7 +502,6 @@ char * EasyJoin(char ** strings, size_t count, char * sep) {
         }
     }
     length += sepLength * (count-null_terms-1);
-    printf("Calculated length: %zu\n", length);
     char * newString = (char*)malloc(length+1);
     if (!newString) return NULL;
 
@@ -490,7 +509,7 @@ char * EasyJoin(char ** strings, size_t count, char * sep) {
 
     _Bool first = true;
 
-    for (int i = 0; i < count; i++) {
+    for (size_t i = 0; i < count; i++) {
 
         if (!strings[i]) {
             continue;
@@ -509,17 +528,4 @@ char * EasyJoin(char ** strings, size_t count, char * sep) {
     newString[length] = '\0';
 
     return newString;
-}
-
-//This is a test
-int main() {
-    char text[] = "This test is a test.";
-    printf("%d",EasyStrCount(text,"test"));
-}
-
-//Extra
-static void efSwap(char* v1, char* v2) {
-    *v1 = *v1 ^ *v2;
-    *v2 = *v1 ^ *v2;
-    *v1 = *v1 ^ *v2;
 }

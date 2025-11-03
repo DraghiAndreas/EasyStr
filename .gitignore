@@ -1,4 +1,28 @@
-x64
-EasyStr.vcxproj
-EasyStr.vcxproj.filters
-EasyStr.vcxproj.user
+# Compiled object files
+*.o
+
+# Compiled static libraries
+*.a
+
+# Compiled shared libraries
+*.so
+*.dll
+*.dylib
+
+# Executables and build outputs
+*.out
+*.exe
+demo
+test
+my_program
+
+# Common editor and OS files
+.DS_Store
+*.swp
+*~
+*.bak
+*.tmp
+
+# Build directories (optional, but good practice)
+build/
+bin/
