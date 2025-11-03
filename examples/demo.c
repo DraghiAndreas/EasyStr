@@ -11,10 +11,9 @@ void demo_string_manipulation_new(void);
 void demo_string_manipulation_inplace(void);
 
 int main(void) {
-    printf("╔════════════════════════════════════════╗\n");
-    printf("║   EasyStr Library Function Demo       ║\n");
-    printf("║   String Manipulation Made Easy       ║\n");
-    printf("╚════════════════════════════════════════╝\n\n");
+
+    printf("   EasyStr Library Function Demo       \n");
+    printf("   String Manipulation Made Easy       \n");
 
     demo_character_checks();
     demo_string_checks();
@@ -22,7 +21,7 @@ int main(void) {
     demo_string_manipulation_new();
     demo_string_manipulation_inplace();
 
-    printf("\n✓ Demo completed successfully!\n");
+    printf("\n Demo completed successfully!\n");
     return 0;
 }
 
