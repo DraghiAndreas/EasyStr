@@ -58,16 +58,17 @@ install(TARGETS easystr
         PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-# Optional: Create pkg-config file
-configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/easystr.pc.in
-        ${CMAKE_CURRENT_BINARY_DIR}/easystr.pc
-        @ONLY
-)
-
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/easystr.pc
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
-)
+# Optional: Create pkg-config file (only if template exists)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/easystr.pc.in")
+    configure_file(
+            ${CMAKE_CURRENT_SOURCE_DIR}/easystr.pc.in
+            ${CMAKE_CURRENT_BINARY_DIR}/easystr.pc
+            @ONLY
+    )
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/easystr.pc
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+    )
+endif()
 
 # Print build configuration
 message(STATUS "EasyStr Library Configuration:")
