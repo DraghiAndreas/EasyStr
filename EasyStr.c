@@ -390,7 +390,7 @@ char* EasyInsert(const char* destination, const char* source, size_t location) {
     return newString;
 }
 
-static char** memAlloc(char** newArr, char* origWord, const size_t len, const size_t wordCounter) {
+static char** memAlloc(char** newArr,const char* origWord, const size_t len, const size_t wordCounter) {
 
     char** temp = (char**)realloc(newArr, sizeof(char*) * wordCounter);
     if (temp == NULL) return NULL;
