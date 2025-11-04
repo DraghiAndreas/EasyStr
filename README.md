@@ -1,7 +1,5 @@
 <img src="docs/media/EasyStr.gif" width="800" alt="Logo">
 
-<img src="docs/media/EasyStr.gif" width="800" alt="Logo">
-
 # EasyStr Installation Guide
 
 This guide explains how to build and use the **EasyStr** string manipulation library on Windows, Linux, and macOS with Visual Studio, CLion + MinGW, or native GCC/Clang.
