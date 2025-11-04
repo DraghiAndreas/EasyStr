@@ -2,8 +2,18 @@
 
 # EasyStr Installation Guide
 
-This guide explains how to install and use the **EasyStr** string manipulation library on Windows with either **Visual Studio** or **CLion + MinGW**.
-I have tested both of these methods to assure complete functionality.
+This guide explains how to build and use the **EasyStr** string manipulation library on Windows with either **Visual Studio (MSVC)** or **CLion + MinGW**.  
+Both setups have been tested to ensure full functionality.
+
+---
+
+## 📖 Table of Contents
+1. [Clone the repository](#1-clone-the-repository)
+2. [Build the library](#2-build-the-library)
+    - [Option A — Visual Studio (MSVC)](#option-a--visual-studio-msvc)
+    - [Option B — CLion + MinGW](#option-b--clion--mingw)
+3. [Notes](#3-notes)
+
 ---
 
 ## 1. Clone the repository
@@ -45,17 +55,23 @@ cmake --build . --config Release
 cmake --install . --config Release
 ```
 
-**Resulting paths (default):**
+> ⚠️ **Administrator privileges required:**  
+> By default, CMake installs to `C:\Program Files (x86)\EasyStr`, which may require admin rights.
+>
+> To install without admin rights, specify a custom prefix:
+> ```cmd
+> cmake --install . --config Release --prefix "C:\Users\YourName\EasyStr"
+> ```
 
-* Headers: `C:\Program Files (x86)\EasyStr\include\EasyStr.h`
-* Library: `C:\Program Files (x86)\EasyStr\lib\easystr.lib`
+**Resulting paths (default):**
+- Headers: `C:\Program Files (x86)\EasyStr\include\EasyStr.h`
+- Library: `C:\Program Files (x86)\EasyStr\lib\easystr.lib`
 
 **6. To use EasyStr in a Visual Studio project:**
-
-* Add the include path `C:\Program Files (x86)\EasyStr\include` to **Additional Include Directories (Project > Properties > C/C++ > Additional Include Directories)**.
-* Add the library path `C:\Program Files (x86)\EasyStr\lib` to **Additional Library Directories (Project > Properties > Linker > General > Additional Library Directories)**.
-* Add `easystr.lib` to **Additional Dependencies (Project > Properties > Linker > Input > Additional Dependencies)**.
-* Include in your code:
+- Add the include path `C:\Program Files (x86)\EasyStr\include` to **C/C++ → Additional Include Directories**.
+- Add the library path `C:\Program Files (x86)\EasyStr\lib` to **Linker → General → Additional Library Directories**.
+- Add `easystr.lib` to **Linker → Input → Additional Dependencies**.
+- Then include it in your code:
 
 ```c
 #include <EasyStr.h>
@@ -95,7 +111,7 @@ cmake -G "MinGW Makefiles" ..
 mingw32-make
 ```
 
-**6. Use EasyStr in a CLion project by updating your `CMakeLists.txt`:**
+**6. Example `CMakeLists.txt` for using EasyStr in your own CLion project:**
 
 ```cmake
 cmake_minimum_required(VERSION 3.22)
@@ -122,7 +138,10 @@ target_link_libraries(EasyStrDemo easystr)
 
 ## 3. Notes
 
-* MinGW and MSVC builds are independent — you can keep both without conflicts.
-* Always use `#include <EasyStr.h>`.
-* Use forward slashes `/` in CMake paths for cross-platform compatibility.
-* Clean & rebuild projects if CMake paths or toolchains change.
+- EasyStr currently builds as a **static library** (`.lib` / `.a`).
+- MinGW and MSVC builds are independent — both can coexist.
+- Always use `#include <EasyStr.h>`.
+- Use forward slashes `/` in CMake paths for cross-platform compatibility.
+- Clean & rebuild projects if CMake paths or toolchains change.
+
+✅ Tested on Windows 10/11 with MSVC 2022 and MinGW (MSYS2)
