@@ -240,22 +240,22 @@ char * EasySearchStr(const char* string1, const char* string2) {
 }
 
 
-char *EasyRSearchChr(char *string, const char chr) {
+char *EasyRSearchChr(const char *string, const char chr) {
     if (!string || !chr) return NULL;
     char *lastPos = NULL;
     while (*string) {
         if (*string == chr)
-            lastPos = string;
+            lastPos = (char*)string;
         string++;
     }
     return lastPos;
 }
 
-char *EasySearchChr(char *string, const char chr) {
+char *EasySearchChr(const char *string, const char chr) {
     if (!string || !chr) return NULL;
     while (*string) {
         if (*string == chr)
-            return string;
+            return (char*)string;
         string++;
     }
     return NULL;

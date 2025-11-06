@@ -39,8 +39,8 @@ int EasyEndsWith(const char * string, const char * suffix);
 // -char*
 char * EasyRSearchStr(const char* string1, const char* string2);
 char * EasySearchStr(const char* string1, const char* string2);
-char *EasyRSearchChr(char *string, const char chr);
-char *EasySearchChr(char *string, const char chr);
+char *EasyRSearchChr(const char *string, const char chr);
+char *EasySearchChr(const char *string, const char chr);
 
 // ---- String Manipulation (New-Allocation) ----
 

@@ -10,7 +10,7 @@ void string_counting(void);
 void string_searching(void);
 void memory_copying_concatenation(void);
 void string_manipulation_nm(void);
-void string_manupulation_ip(void);
+void string_manipulation_ip(void);
 
 int main(void) {
     character_validation();
@@ -20,14 +20,14 @@ int main(void) {
     string_searching();
     memory_copying_concatenation();
     string_manipulation_nm();
-    string_manupulation_ip();
+    string_manipulation_ip();
 }
 
 void character_validation(void) {
     printf("1. Character Validation\n");
     sep();
     char test_chars[] = {'A','1',' ','b','$'};
-    for (int i = 0; i < sizeof(test_chars)/sizeof(test_chars[0]); i++) {
+    for (size_t i = 0; i < sizeof(test_chars)/sizeof(test_chars[0]); i++) {
         printf("Character : '%c' | IsAlpha : %d | IsDigit : %d | IsAlnum : %d | IsUpper : %d | IsLower : %d | IsSpace : %d \n",test_chars[i],
             EasyIsAlphaChr(test_chars[i]),
             EasyIsDigitChr(test_chars[i]),
@@ -43,7 +43,7 @@ void string_validation(void) {
     printf("2. String Validation\n");
     sep();
     char *test_chars[] = {"abcdef","123456","abc456","ABCDEF","      "};
-    for (int i = 0; i < sizeof(test_chars)/sizeof(test_chars[0]); i++) {
+    for (size_t i = 0; i < sizeof(test_chars)/sizeof(test_chars[0]); i++) {
         printf("Character : '%s' | IsAlpha : %d | IsDigit : %d | IsAlnum : %d | IsUpper : %d | IsLower : %d | IsSpace : %d \n",test_chars[i],
             EasyIsAlphaStr(test_chars[i]),
             EasyIsDigitStr(test_chars[i]),
@@ -84,8 +84,9 @@ void string_comparison_inspection(void) {
     printf("String1 : '%s' | Prefix : '%s' | StartsWith : %d \n\n",string5,string7,EasyStartsWith(string5,string7));
 
     printf("EasyEndsWith: :\n");
-    printf("String1 : '%s' | Suffix : '%s' | StartsWith : %d \n",string5,string6,EasyEndsWith(string5,string6));
-    printf("String1 : '%s' | Suffix : '%s' | StartsWith : %d \n",string5,string7,EasyEndsWith(string5,string7));
+    // FIXED: Typo in printf, was "StartsWith"
+    printf("String1 : '%s' | Suffix : '%s' | EndsWith : %d \n",string5,string6,EasyEndsWith(string5,string6));
+    printf("String1 : '%s' | Suffix : '%s' | EndsWith : %d \n",string5,string7,EasyEndsWith(string5,string7));
     printf("\n");
 }
 
@@ -99,12 +100,14 @@ void string_counting(void) {
     const char * string3 = "easy";
 
     printf("EasyCount: \n");
-    printf("String1 : '%s' | Chr : '%c' | Count : %d \n",string1,chr,EasyCount(string1,chr));
-    printf("String1 : '%s' | Chr : '%c' | Count : %d \n\n",string1,chr2,EasyCount(string1,chr2));
+
+    printf("String1 : '%s' | Chr : '%c' | Count : %zu \n",string1,chr,EasyCount(string1,chr));
+    printf("String1 : '%s' | Chr : '%c' | Count : %zu \n\n",string1,chr2,EasyCount(string1,chr2));
 
     printf("EasyStrCount: \n");
-    printf("String1 : '%s' | Chr : '%s' | Count : %d \n",string1,string2,EasyStrCount(string1,string2));
-    printf("String1 : '%s' | Chr : '%s' | Count : %d \n",string1,string3,EasyCount(string1,string3));
+    printf("String1 : '%s' | Chr : '%s' | Count : %zu \n",string1,string2,EasyStrCount(string1,string2));
+
+    printf("String1 : '%s' | Chr : '%s' | Count : %zu \n",string1,string3,EasyStrCount(string1,string3));
     printf("\n");
 }
 
@@ -119,22 +122,22 @@ void string_searching(void) {
 
     printf("EasySearchChr: \n");
     printf("Character : '%c'\n",chr);
-    char * result = EasySearchChr(string1,chr);
+    const char * result = EasySearchChr(string1,chr);
     printf("%s\n",result);
 
     printf("EasyRSearchChr: \n");
     printf("Character : '%c'\n",chr);
-    char * result2 = EasyRSearchChr(string1,chr);
+    const char * result2 = EasyRSearchChr(string1,chr);
     printf("%s\n",result2);
 
     printf("EasySearchStr: \n");
     printf("String : '%s'\n",string2);
-    char * result3 = EasySearchStr(string1,string2);
+    const char * result3 = EasySearchStr(string1,string2);
     printf("%s\n",result3);
 
     printf("EasyRSearchStr: \n");
     printf("String : '%s'\n",string2);
-    char * result4 = EasyRSearchStr(string1,string2);
+    const char * result4 = EasyRSearchStr(string1,string2);
     printf("%s\n",result4);
 }
 
@@ -142,7 +145,7 @@ void memory_copying_concatenation(void) {
     printf("6. Memory, Copy, & Concatenation\n");
     sep();
 
-    char * string = "Original String";
+    const char * string = "Original String";
     char * copy = NULL;
 
     printf("EasyStrDup: \n");
@@ -165,7 +168,7 @@ void memory_copying_concatenation(void) {
     printf("Original String : '%s' | Address : %p \n",destination,destination);
     printf("Source String : '%s' | Address : %p \n",source2,source2);
     EasyNCpy(destination+4,source2,n);
-    printf("Original String (post-copy) : '%s' | N : %lld | Address : %p \n\n",destination,n,destination);
+    printf("Original String (post-copy) : '%s' | N : %zu | Address : %p \n\n",destination,n,destination);
 
     char source3[] = " a simple";
     printf("EasyCat: \n");
@@ -178,9 +181,9 @@ void memory_copying_concatenation(void) {
     n = 5;
     printf("EasyNCat: \n");
     printf("Original String : '%s' | Address : %p \n",destination,destination);
-    printf("Source String : '%s' | Address : %p \n",source3,source3);
+    printf("Source String : '%s' | Address : %p \n",source4,source4);
     EasyNCat(destination,source4,n);
-    printf("Original String (post-concat) : '%s' | N : %lld | Address : %p \n\n",destination,n,destination);
+    printf("Original String (post-concat) : '%s' | N : %zu | Address : %p \n\n",destination,n,destination);
 
     free(copy);
 }
@@ -189,35 +192,35 @@ void string_manipulation_nm(void) {
     printf("7. String Manipulation (New Memory)\n");
     sep();
 
-    char * string = "     TEST";
+    const char * string = "     TEST";
     printf("EasyLTrim: \n");
     printf("Original String : '%s' | Address : %p\n" ,string,string);
     char * str = EasyLTrim(string);
     printf("Trimmed String : '%s' | Address : %p\n\n",str,str);
 
-    char * string2 = "TEST     ";
-    printf("EasyLTrim: \n");
+    const char * string2 = "TEST     ";
+    printf("EasyRTrim: \n"); // FIXED: Typo, was EasyLTrim
     printf("Original String : '%s' | Address : %p\n" ,string2,string2);
     char * str2 = EasyRTrim(string2);
     printf("Trimmed String : '%s' | Address : %p\n\n",str2,str2);
 
-    char * string3 = "     TEST     ";
+    const char * string3 = "     TEST     ";
     printf("EasyTrim: \n");
     printf("Original String : '%s' | Address : %p\n" ,string3,string3);
     char * str3 = EasyTrim(string3);
     printf("Trimmed String : '%s' | Address : %p\n\n",str3,str3);
 
-    char * string4 = "This is a test";
-    char * source = "simple ";
+    const char * string4 = "This is a test";
+    const char * source = "simple ";
     size_t location = 10;
     printf("EasyInsert: \n");
     printf("Original String : '%s' | Address : %p\n" ,string4,string4);
-    printf("Word-to-insert : '%s' | Location : %lld\n" ,source,location);
+    printf("Word-to-insert : '%s' | Location : %zu\n" ,source,location);
     char * str4 = EasyInsert(string4,source,location);
     printf("Inserted String : '%s' | Address : %p\n\n",str4,str4);
 
-    char * source2 = "demo";
-    char * replace = "test";
+    const char * source2 = "demo";
+    const char * replace = "test";
     printf("EasyReplace: \n");
     printf("Original String : '%s' | Address : %p\n" ,string4,string4);
     printf("Replacing '%s' -> '%s'\n",replace,source2);
@@ -225,23 +228,23 @@ void string_manipulation_nm(void) {
     printf("Replaced String : '%s' | Address : %p\n\n",str5,str5);
 
     char ** newArr = NULL;
-    int wordCount;
+    size_t wordCount;
     printf("EasySplit: \n");
     printf("Original String : '%s' | Address : %p\n" ,string4,string4);
     newArr = EasySplit(newArr,string4," ",&wordCount);
-    printf("Number of words : %d\n", wordCount);
+    printf("Number of words : %zu\n", wordCount);
     printf("Words : \n");
-    for (int i = 0 ; i < wordCount ; i++) {
-        printf("newArr[%d] : %s\n",i,newArr[i]);
+    for (size_t i = 0 ; i < wordCount ; i++) {
+        printf("newArr[%zu] : %s\n",i,newArr[i]);
     }
     printf("\n");
 
     printf("EasyJoin: \n");
     char* sep1 = " ";
-    printf("Number of words : %d\n", wordCount);
+    printf("Number of words : %zu\n", wordCount);
     printf("Words : \n");
-    for (int i = 0 ; i < wordCount ; i++) {
-        printf("newArr[%d] : %s\n",i,newArr[i]);
+    for (size_t i = 0 ; i < wordCount ; i++) {
+        printf("newArr[%zu] : %s\n",i,newArr[i]);
     }
     char * newStr = EasyJoin(newArr,wordCount,sep1);
     printf("Joined string : %s | Separator : '%s'\n",newStr,sep1);
@@ -251,14 +254,14 @@ void string_manipulation_nm(void) {
     free(str3);
     free(str4);
     free(str5);
-    for (int i = 0 ; i < wordCount ; i++) {
+    for (size_t i = 0 ; i < wordCount ; i++) {
         free(newArr[i]);
     }
     free(newArr);
     free(newStr);
 }
 
-void string_manupulation_ip(void) {
+void string_manipulation_ip(void) {
     printf("8. String Manipulation (In-Place)\n");
     sep();
 
