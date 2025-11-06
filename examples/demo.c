@@ -1,220 +1,294 @@
-#include "EasyStr.h"
+#include <EasyStr.h>
 #include <stdio.h>
 #include <stdlib.h>
+#define sep() printf("-------------------------------\n")
 
-#define SEPARATOR() printf("\n%s\n\n", "========================================")
-
-void demo_character_checks(void);
-void demo_string_checks(void);
-void demo_comparison_searching(void);
-void demo_string_manipulation_new(void);
-void demo_string_manipulation_inplace(void);
+void character_validation(void);
+void string_validation(void);
+void string_comparison_inspection(void);
+void string_counting(void);
+void string_searching(void);
+void memory_copying_concatenation(void);
+void string_manipulation_nm(void);
+void string_manupulation_ip(void);
 
 int main(void) {
-
-    printf("   EasyStr Library Function Demo       \n");
-    printf("   String Manipulation Made Easy       \n");
-
-    demo_character_checks();
-    demo_string_checks();
-    demo_comparison_searching();
-    demo_string_manipulation_new();
-    demo_string_manipulation_inplace();
-
-    printf("\n Demo completed successfully!\n");
-    return 0;
+    character_validation();
+    string_validation();
+    string_comparison_inspection();
+    string_counting();
+    string_searching();
+    memory_copying_concatenation();
+    string_manipulation_nm();
+    string_manupulation_ip();
 }
 
-void demo_character_checks(void) {
-    printf("1. CHARACTER TYPE CHECKS\n");
-    SEPARATOR();
-
-    char test_chars[] = {'A', 'z', '5', ' ', '@'};
-    const char* descriptions[] = {"'A'", "'z'", "'5'", "' '", "'@'"};
-
-    printf("Testing characters:\n");
-    for (int i = 0; i < 5; i++) {
-        printf("  %s -> Alpha: %d, Digit: %d, Alnum: %d, Upper: %d, Lower: %d, Space: %d\n",
-               descriptions[i],
-               EasyIsAlphaChr(test_chars[i]),
-               EasyIsDigitChr(test_chars[i]),
-               EasyIsAlnumChr(test_chars[i]),
-               EasyIsUpperChr(test_chars[i]),
-               EasyIsLowerChr(test_chars[i]),
-               EasyIsSpaceChr(test_chars[i]));
+void character_validation(void) {
+    printf("1. Character Validation\n");
+    sep();
+    char test_chars[] = {'A','1',' ','b','$'};
+    for (int i = 0; i < sizeof(test_chars)/sizeof(test_chars[0]); i++) {
+        printf("Character : '%c' | IsAlpha : %d | IsDigit : %d | IsAlnum : %d | IsUpper : %d | IsLower : %d | IsSpace : %d \n",test_chars[i],
+            EasyIsAlphaChr(test_chars[i]),
+            EasyIsDigitChr(test_chars[i]),
+            EasyIsAlnumChr(test_chars[i]),
+            EasyIsUpperChr(test_chars[i]),
+            EasyIsLowerChr(test_chars[i]),
+            EasyIsSpaceChr(test_chars[i]));
     }
+    printf("\n");
 }
 
-void demo_string_checks(void) {
-    printf("\n2. STRING TYPE CHECKS\n");
-    SEPARATOR();
-
-    const char* test_strings[] = {
-        "HelloWorld",
-        "12345",
-        "Hello123",
-        "UPPERCASE",
-        "lowercase",
-        "   "
-    };
-
-    printf("Testing strings:\n");
-    for (int i = 0; i < 6; i++) {
-        printf("  \"%s\":\n", test_strings[i]);
-        printf("    IsAlpha: %d | IsDigit: %d | IsAlnum: %d\n",
-               EasyIsAlphaStr(test_strings[i]),
-               EasyIsDigitStr(test_strings[i]),
-               EasyIsAlnumStr(test_strings[i]));
-        printf("    IsUpper: %d | IsLower: %d | IsSpace: %d\n",
-               EasyIsUpperStr(test_strings[i]),
-               EasyIsLowerStr(test_strings[i]),
-               EasyIsSpaceStr(test_strings[i]));
+void string_validation(void) {
+    printf("2. String Validation\n");
+    sep();
+    char *test_chars[] = {"abcdef","123456","abc456","ABCDEF","      "};
+    for (int i = 0; i < sizeof(test_chars)/sizeof(test_chars[0]); i++) {
+        printf("Character : '%s' | IsAlpha : %d | IsDigit : %d | IsAlnum : %d | IsUpper : %d | IsLower : %d | IsSpace : %d \n",test_chars[i],
+            EasyIsAlphaStr(test_chars[i]),
+            EasyIsDigitStr(test_chars[i]),
+            EasyIsAlnumStr(test_chars[i]),
+            EasyIsUpperStr(test_chars[i]),
+            EasyIsLowerStr(test_chars[i]),
+            EasyIsSpaceStr(test_chars[i]));
     }
+    printf("\n");
 }
 
-void demo_comparison_searching(void) {
-    printf("\n3. COMPARISON & SEARCHING\n");
-    SEPARATOR();
+void string_comparison_inspection(void) {
+    printf("3. String Comparison/Inspection\n");
+    sep();
 
-    // Length and counting
-    const char* text = "Hello World! Welcome to EasyStr!";
-    printf("String: \"%s\"\n", text);
-    printf("  Length: %zu\n", EasyLen(text));
-    printf("  Count 'o': %zu\n", EasyCount(text, 'o'));
-    printf("  Count \"World\": %zu\n\n", EasyStrCount(text, "World"));
+    const char * string1 = "This is a test";
+    printf("EasyLen:\n");
+    printf("String : '%s' | Length : %zu \n\n",string1,EasyLen(string1));
 
-    // String comparison
-    const char* str1 = "Hello";
-    const char* str2 = "Hello";
-    const char* str3 = "World";
-    printf("Comparison:\n");
-    printf("  EasyCmp(\"%s\", \"%s\"): %d\n", str1, str2, EasyCmp(str1, str2));
-    printf("  EasyCmp(\"%s\", \"%s\"): %d\n", str1, str3, EasyCmp(str1, str3));
-    printf("  EasyNCmp(\"%s\", \"%s\", 3): %d\n\n", str1, str3, EasyNCmp(str1, str3, 3));
+    const char * string2 = "Testing";
+    const char * string3 = "Testing";
+    const char * string4 = "Test";
+    printf("EasyCmp:\n");
+    printf("String1 : '%s' | String2 : '%s' | Cmp : %d \n",string2,string3,EasyCmp(string2,string3));
+    printf("String1 : '%s' | String2 : '%s' | Cmp : %d \n\n",string3,string4,EasyCmp(string3,string4));
 
-    // Prefix/Suffix checking
-    const char* filename = "document.txt";
-    printf("Filename: \"%s\"\n", filename);
-    printf("  StartsWith \"doc\": %d\n", EasyStartsWith(filename, "doc"));
-    printf("  EndsWith \".txt\": %d\n", EasyEndsWith(filename, ".txt"));
-    printf("  EndsWith \".pdf\": %d\n\n", EasyEndsWith(filename, ".pdf"));
+    const char * string5 = "Testing";
+    const char * string6 = "Test";
+    const char * string7 = "ing";
+    int n = 4;
+    printf("EasyNCmp:\n");
+    printf("String1 : '%s' | String2 : '%s' | N : %d | Cmp : %d \n",string5,string6,n,EasyNCmp(string5,string6,n));
+    n = 5;
+    printf("String1 : '%s' | String2 : '%s' | N : %d | Cmp : %d \n\n",string5,string6,n,EasyNCmp(string5,string6,n));
 
-    // Searching
-    const char* haystack = "The quick brown fox jumps";
-    printf("Haystack: \"%s\"\n", haystack);
+    printf("EasyStartsWith: :\n");
+    printf("String1 : '%s' | Prefix : '%s' | StartsWith : %d \n",string5,string6,EasyStartsWith(string5,string6));
+    printf("String1 : '%s' | Prefix : '%s' | StartsWith : %d \n\n",string5,string7,EasyStartsWith(string5,string7));
 
-    char* found = EasySearchStr(haystack, "brown");
-    if (found) {
-        printf("  SearchStr \"brown\": Found at position %ld\n", found - haystack);
-    }
-
-    found = EasySearchChr((char*)haystack, 'q');
-    if (found) {
-        printf("  SearchChr 'q': Found at position %ld\n", found - haystack);
-    }
-
-    found = EasyRSearchChr((char*)haystack, 'o');
-    if (found) {
-        printf("  RSearchChr 'o': Last occurrence at position %ld\n", found - haystack);
-    }
+    printf("EasyEndsWith: :\n");
+    printf("String1 : '%s' | Suffix : '%s' | StartsWith : %d \n",string5,string6,EasyEndsWith(string5,string6));
+    printf("String1 : '%s' | Suffix : '%s' | StartsWith : %d \n",string5,string7,EasyEndsWith(string5,string7));
+    printf("\n");
 }
 
-void demo_string_manipulation_new(void) {
-    printf("\n4. STRING MANIPULATION (New Allocation)\n");
-    SEPARATOR();
+void string_counting(void) {
+    printf("4. String Counting\n");
+    sep();
+    const char * string1 = "This test is a simple test";
+    const char chr = 't';
+    const char chr2 = 'a';
+    const char * string2 = "test";
+    const char * string3 = "easy";
 
-    // String duplication
-    const char* original = "EasyStr Library";
-    char* duplicate = EasyStrDup(original);
-    printf("StrDup: \"%s\" -> \"%s\"\n\n", original, duplicate);
-    free(duplicate);
+    printf("EasyCount: \n");
+    printf("String1 : '%s' | Chr : '%c' | Count : %d \n",string1,chr,EasyCount(string1,chr));
+    printf("String1 : '%s' | Chr : '%c' | Count : %d \n\n",string1,chr2,EasyCount(string1,chr2));
 
-    // Trimming
-    const char* padded = "   Hello World   ";
-    char* ltrimmed = EasyLTrim(padded);
-    char* rtrimmed = EasyRTrim(padded);
-    char* trimmed = EasyTrim(padded);
-    printf("Trimming: \"%s\"\n", padded);
-    printf("  LTrim: \"%s\"\n", ltrimmed);
-    printf("  RTrim: \"%s\"\n", rtrimmed);
-    printf("  Trim:  \"%s\"\n\n", trimmed);
-    free(ltrimmed);
-    free(rtrimmed);
-    free(trimmed);
+    printf("EasyStrCount: \n");
+    printf("String1 : '%s' | Chr : '%s' | Count : %d \n",string1,string2,EasyStrCount(string1,string2));
+    printf("String1 : '%s' | Chr : '%s' | Count : %d \n",string1,string3,EasyCount(string1,string3));
+    printf("\n");
+}
 
-    // Replace
-    const char* sentence = "I love cats and cats are great!";
-    char* replaced = EasyReplace(sentence, "cats", "dogs");
-    printf("Replace:\n");
-    printf("  Original: \"%s\"\n", sentence);
-    printf("  Replaced: \"%s\"\n\n", replaced);
-    free(replaced);
+void string_searching(void) {
+    printf("5. String Searching\n");
+    sep();
+    const char * string1 = "This test is a simple test used for testing puropses\n";
+    printf("Original String : %s\n", string1);
 
-    // Insert
-    const char* base = "Hello!";
-    char* inserted = EasyInsert(base, " World", 5);
-    printf("Insert:\n");
-    printf("  Base: \"%s\"\n", base);
-    printf("  Insert \" World\" at position 5: \"%s\"\n\n", inserted);
-    free(inserted);
+    const char chr = 't';
+    const char * string2 = "test";
 
-    // Split
-    const char* csv = "apple,banana,cherry,date";
-    size_t count = 0;
-    char** parts = EasySplit(NULL, csv, ",", &count);
-    printf("Split: \"%s\" by \",\"\n", csv);
-    printf("  Parts (%zu): ", count);
-    for (size_t i = 0; i < count; i++) {
-        printf("\"%s\"%s", parts[i], (i < count - 1) ? ", " : "\n");
-        free(parts[i]);
+    printf("EasySearchChr: \n");
+    printf("Character : '%c'\n",chr);
+    char * result = EasySearchChr(string1,chr);
+    printf("%s\n",result);
+
+    printf("EasyRSearchChr: \n");
+    printf("Character : '%c'\n",chr);
+    char * result2 = EasyRSearchChr(string1,chr);
+    printf("%s\n",result2);
+
+    printf("EasySearchStr: \n");
+    printf("String : '%s'\n",string2);
+    char * result3 = EasySearchStr(string1,string2);
+    printf("%s\n",result3);
+
+    printf("EasyRSearchStr: \n");
+    printf("String : '%s'\n",string2);
+    char * result4 = EasyRSearchStr(string1,string2);
+    printf("%s\n",result4);
+}
+
+void memory_copying_concatenation(void) {
+    printf("6. Memory, Copy, & Concatenation\n");
+    sep();
+
+    char * string = "Original String";
+    char * copy = NULL;
+
+    printf("EasyStrDup: \n");
+    printf("Original String : '%s' | Address : %p\n",string, string);
+    copy = EasyStrDup(string);
+    printf("Duplicated String : '%s' | Address : %p\n\n",copy, copy);
+
+    char source1[] = "This";
+    char destination[20] = "";
+
+    printf("EasyCpy: \n");
+    printf("Original String : '%s' | Address : %p \n",destination,destination);
+    printf("Source String : '%s' | Address : %p \n",source1,source1);
+    EasyCpy(destination,source1);
+    printf("Original String (post-copy) : '%s' | Address : %p \n\n",destination,destination);
+
+    char source2[] = " is a test";
+    size_t n = 3;
+    printf("EasyNCpy: \n");
+    printf("Original String : '%s' | Address : %p \n",destination,destination);
+    printf("Source String : '%s' | Address : %p \n",source2,source2);
+    EasyNCpy(destination+4,source2,n);
+    printf("Original String (post-copy) : '%s' | N : %lld | Address : %p \n\n",destination,n,destination);
+
+    char source3[] = " a simple";
+    printf("EasyCat: \n");
+    printf("Original String : '%s' | Address : %p \n",destination,destination);
+    printf("Source String : '%s' | Address : %p \n",source3,source3);
+    EasyCat(destination,source3);
+    printf("Original String (post-concat) : '%s' | Address : %p \n\n",destination,destination);
+
+    char source4[] = " testing";
+    n = 5;
+    printf("EasyNCat: \n");
+    printf("Original String : '%s' | Address : %p \n",destination,destination);
+    printf("Source String : '%s' | Address : %p \n",source3,source3);
+    EasyNCat(destination,source4,n);
+    printf("Original String (post-concat) : '%s' | N : %lld | Address : %p \n\n",destination,n,destination);
+
+    free(copy);
+}
+
+void string_manipulation_nm(void) {
+    printf("7. String Manipulation (New Memory)\n");
+    sep();
+
+    char * string = "     TEST";
+    printf("EasyLTrim: \n");
+    printf("Original String : '%s' | Address : %p\n" ,string,string);
+    char * str = EasyLTrim(string);
+    printf("Trimmed String : '%s' | Address : %p\n\n",str,str);
+
+    char * string2 = "TEST     ";
+    printf("EasyLTrim: \n");
+    printf("Original String : '%s' | Address : %p\n" ,string2,string2);
+    char * str2 = EasyRTrim(string2);
+    printf("Trimmed String : '%s' | Address : %p\n\n",str2,str2);
+
+    char * string3 = "     TEST     ";
+    printf("EasyTrim: \n");
+    printf("Original String : '%s' | Address : %p\n" ,string3,string3);
+    char * str3 = EasyTrim(string3);
+    printf("Trimmed String : '%s' | Address : %p\n\n",str3,str3);
+
+    char * string4 = "This is a test";
+    char * source = "simple ";
+    size_t location = 10;
+    printf("EasyInsert: \n");
+    printf("Original String : '%s' | Address : %p\n" ,string4,string4);
+    printf("Word-to-insert : '%s' | Location : %lld\n" ,source,location);
+    char * str4 = EasyInsert(string4,source,location);
+    printf("Inserted String : '%s' | Address : %p\n\n",str4,str4);
+
+    char * source2 = "demo";
+    char * replace = "test";
+    printf("EasyReplace: \n");
+    printf("Original String : '%s' | Address : %p\n" ,string4,string4);
+    printf("Replacing '%s' -> '%s'\n",replace,source2);
+    char * str5 = EasyReplace(string4,replace,source2);
+    printf("Replaced String : '%s' | Address : %p\n\n",str5,str5);
+
+    char ** newArr = NULL;
+    int wordCount;
+    printf("EasySplit: \n");
+    printf("Original String : '%s' | Address : %p\n" ,string4,string4);
+    newArr = EasySplit(newArr,string4," ",&wordCount);
+    printf("Number of words : %d\n", wordCount);
+    printf("Words : \n");
+    for (int i = 0 ; i < wordCount ; i++) {
+        printf("newArr[%d] : %s\n",i,newArr[i]);
     }
-    free(parts);
     printf("\n");
 
-    // Join
-    char* words[] = {"Easy", "Str", "Library"};
-    char* joined = EasyJoin(words, 3, "-");
-    printf("Join: [\"Easy\", \"Str\", \"Library\"] with \"-\"\n");
-    printf("  Result: \"%s\"\n", joined);
-    free(joined);
+    printf("EasyJoin: \n");
+    char* sep1 = " ";
+    printf("Number of words : %d\n", wordCount);
+    printf("Words : \n");
+    for (int i = 0 ; i < wordCount ; i++) {
+        printf("newArr[%d] : %s\n",i,newArr[i]);
+    }
+    char * newStr = EasyJoin(newArr,wordCount,sep1);
+    printf("Joined string : %s | Separator : '%s'\n",newStr,sep1);
+
+    free(str);
+    free(str2);
+    free(str3);
+    free(str4);
+    free(str5);
+    for (int i = 0 ; i < wordCount ; i++) {
+        free(newArr[i]);
+    }
+    free(newArr);
+    free(newStr);
 }
 
-void demo_string_manipulation_inplace(void) {
-    printf("\n5. STRING MANIPULATION (In-Place)\n");
-    SEPARATOR();
+void string_manupulation_ip(void) {
+    printf("8. String Manipulation (In-Place)\n");
+    sep();
 
-    // Copy operations
-    char dest[50];
-    EasyCpy(dest, "Hello");
-    printf("Cpy: \"%s\"\n", dest);
+    char test[] = "tEsTiNg";
+    printf("EasyLower:\n");
+    printf("Original String : '%s' | Address : %p\n" ,test,test);
+    EasyLower(test);
+    printf("Original String (after) : '%s' | Address : %p\n\n" ,test,test);
 
-    EasyNCpy(dest, "Welcome to EasyStr", 7);
-    dest[7] = '\0';
-    printf("NCpy (7 chars): \"%s\"\n\n", dest);
+    EasyCpy(test,"tEsTiNg");
+    printf("EasyUpper:\n");
+    printf("Original String : '%s' | Address : %p\n" ,test,test);
+    EasyUpper(test);
+    printf("Original String (after) : '%s' | Address : %p\n\n" ,test,test);
 
-    // Concatenation
-    char buffer[100] = "Hello";
-    EasyCat(buffer, " World");
-    printf("Cat: \"%s\"\n", buffer);
+    EasyCpy(test,"tEsTiNg");
+    printf("EasySwapcase:\n");
+    printf("Original String : '%s' | Address : %p\n" ,test,test);
+    EasySwapcase(test);
+    printf("Original String (after) : '%s' | Address : %p\n\n" ,test,test);
 
-    EasyNCat(buffer, "!!!!!", 2);
-    printf("NCat (2 chars): \"%s\"\n\n", buffer);
+    EasyCpy(test,"tEsTiNg");
+    printf("EasyCapitalize:\n");
+    printf("Original String : '%s' | Address : %p\n" ,test,test);
+    EasyCapitalize(test);
+    printf("Original String (after) : '%s' | Address : %p\n\n" ,test,test);
 
-    // Case transformations
-    char text1[50] = "Hello World";
-    char text2[50] = "Hello World";
-    char text3[50] = "Hello World";
-    char text4[50] = "hello world";
-
-    printf("Case transformations on \"Hello World\":\n");
-    printf("  Upper: \"%s\"\n", EasyUpper(text1));
-    printf("  Lower: \"%s\"\n", EasyLower(text2));
-    printf("  Swapcase: \"%s\"\n", EasySwapcase(text3));
-    printf("  Capitalize: \"%s\"\n\n", EasyCapitalize(text4));
-
-    // Reverse
-    char reversible[50] = "EasyStr";
-    printf("Reverse: \"%s\" -> ", reversible);
-    EasyRev(reversible);
-    printf("\"%s\"\n", reversible);
+    EasyCpy(test,"tEsTiNg");
+    printf("EasyRev:\n");
+    printf("Original String : '%s' | Address : %p\n" ,test,test);
+    EasyRev(test);
+    printf("Original String (after) : '%s' | Address : %p\n\n" ,test,test);
 }

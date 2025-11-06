@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 # Project definition
 project(EasyStr
-        VERSION 1.2.4
+        VERSION 1.3.0
         DESCRIPTION "A simple and intuitive C string manipulation library"
         LANGUAGES C
 )
