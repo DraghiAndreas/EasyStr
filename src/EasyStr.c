@@ -403,7 +403,8 @@ static char** memAlloc(char** newArr,const char* origWord, const size_t len, con
     newArr[wordCounter - 1][len] = '\0';
     return newArr;
 }
-char** EasySplit(char** newArr, const char* source, const char* sep, size_t* wordCounter)
+
+char ** EasySplit(char ** newArr, const char * source, const char* sep, size_t* wordCounter)
 {
     if (source == NULL || sep == NULL || wordCounter == NULL) return NULL;
 
@@ -412,7 +413,6 @@ char** EasySplit(char** newArr, const char* source, const char* sep, size_t* wor
     const char* origSep = sep;
 
     *wordCounter = 0;
-
 
     while (*source)
     {
