@@ -1,8 +1,46 @@
-<img src="docs/media/EasyStr.gif" width="800" alt="Logo">
+<img src="docs/media/EasyStr.gif" width="800" alt="EasyStr Logo">
 
-# EasyStr Installation Guide
+# EasyStr
 
-## 1. Clone the repository
+A lightweight, easy-to-use C library for simplified string manipulation and handling.
+
+---
+
+## Table of Contents
+- [About](#about)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+   - [Clone the Repository](#1-clone-the-repository)
+   - [Building and Installing](#2-building-and-installing-the-library)
+- [Usage](#usage)
+
+- [Documentation](#documentation)
+- [License](#license)
+
+---
+
+## About
+
+EasyStr is a C library designed to simplify common string operations and provide intuitive string handling capabilities. Whether you're working on a small project or a larger application, EasyStr offers a straightforward API for string manipulation.
+
+---
+
+## Prerequisites
+
+Before installing EasyStr, ensure you have the following tools installed:
+
+- **CMake** (version 3.10 or higher)
+- **C Compiler** (GCC, Clang, or MSVC)
+- One of the following development environments:
+   - MSYS2 MINGW64
+   - CLion
+   - Visual Studio
+
+---
+
+## Installation
+
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/DraghiAndreas/EasyStr.git
@@ -11,152 +49,201 @@ cd EasyStr
 
 ---
 
-## 2. Building/Installing the library
+### 2. Building and Installing the Library
 
-### Option A - MSYS2
-1. Open MSYS2 MINGW64 (run as admin)
-2. Run the following commands:
-```cmd
+#### Option A: Using MSYS2
+
+1. Open MSYS2 MINGW64 with administrator privileges
+2. Create a build directory and navigate to it:
+```bash
 mkdir build
 cd build
 ```
-Note : the name build is not necessary but it's good practice
-3. Run the configuration (This command is going to look for the CMakeLists.txt file from the root folder)
-```cmd
+> **Note:** While the directory name `build` is not mandatory, it follows standard CMake conventions.
+
+3. Configure the project (this will locate the CMakeLists.txt file in the root directory):
+```bash
 cmake ..
 ```
-4. Build the library with:
-```cmd
+
+4. Build the library:
+```bash
 cmake --build .
 ```
-5. And now, finally, the installation **(Admin permissions required)**
-```cmd
+
+5. Install the library (requires administrator permissions):
+```bash
 cmake --install .
 ```
-If everything worked correctly you should see a something like:
-```cmd
+
+Upon successful installation, you should see output similar to:
+```
 -- Install configuration: "Release"
 -- Installing: C:/Program Files (x86)/EasyStr/lib/libeasystr.a
 -- Installing: C:/Program Files (x86)/EasyStr/include/EasyStr.h
 -- Installing: C:/Program Files (x86)/EasyStr/lib/pkgconfig/easystr.pc
 ```
-Good job, you got yourself my library, now keep these paths in mind, these will come in handy later:
-```cmd
-C:/Program Files (x86)/EasyStr/lib
-C:/Program Files (x86)/EasyStr/include
-```
 
-### Option B — CLion (and VS i guess)
->**Note: Installing the library in CLion or MSYS2 doesn't mean it's going to be any harder to use in VS, than it would be if you installed it in VS**
+**Important:** Note these installation paths for later configuration:
+- `C:/Program Files (x86)/EasyStr/lib`
+- `C:/Program Files (x86)/EasyStr/include`
 
-1. Open the folder EasyStr in CLion.
-2. Right click on CMakeLists.txt and press the `Reload CMake Project`
-3. 💥BOOM💥 now you have a folder named `cmake-build-debug`
->**Note:** In VS you just have to open EasyStr and it will do the build automatically, but you won't see a build folder, cause microsoft.
-> So have fun finding it !
+#### Option B: Using CLion or Visual Studio
 
-4. Now go ahead, open the built-in terminal and :
-```cmd
+> **Note:** The choice of IDE for installation does not affect compatibility with other development environments.
+
+##### CLion Instructions
+
+1. Open the EasyStr folder in CLion
+2. Right-click on `CMakeLists.txt` and select `Reload CMake Project`
+3. CLion will automatically generate a `cmake-build-debug` folder
+4. Open the integrated terminal and navigate to the build directory:
+```bash
 cd cmake-build-debug
 ```
-or if you're using VS:
-```cmd
-switch to CLion
-nvm
-cd *wherever the build folder is*
+
+5. Install the library (requires administrator permissions):
+```bash
+cmake --install .
 ```
-5. And now, finally, the installation **(Admin permissions required)**
+
+##### Visual Studio Instructions
+
+1. Open the EasyStr folder in Visual Studio
+2. Visual Studio will automatically build the project
+3. Locate the build directory
+4. Open a command prompt with administrator privileges in the build directory
+5. Run the installation command:
 ```cmd
 cmake --install .
 ```
-If everything worked correctly you should see a something like:
-```cmd
+
+Upon successful installation, you should see output similar to:
+```
 -- Install configuration: "Release"
 -- Installing: C:/Program Files (x86)/EasyStr/lib/libeasystr.a
 -- Installing: C:/Program Files (x86)/EasyStr/include/EasyStr.h
 -- Installing: C:/Program Files (x86)/EasyStr/lib/pkgconfig/easystr.pc
 ```
-Good job, you got yourself my library, now keep these paths in mind, these will come in handy later:
-```cmd
-C:/Program Files (x86)/EasyStr/lib
-C:/Program Files (x86)/EasyStr/include
-```
 
-## 3. Using <EasyStr.h> in a project
+**Important:** Note these installation paths for later configuration:
+- `C:/Program Files (x86)/EasyStr/lib`
+- `C:/Program Files (x86)/EasyStr/include`
 
-### Option A - CLion | Simple
-
-1. Create a new CLion project, you will notice that you have a `CMakeLists.txt` file, good.
-2. Open the file, it probably looks something like this:
-```cmake
-cmake_minimum_required(VERSION 4.0)
-project(untitled1 C)
-
-set(CMAKE_C_STANDARD 11)
-
-add_executable(untitled1 main.c)
-```
-3. Add the following lines:
-```cmake
-include_directories("C:/Program Files (x86)/EasyStr/include")
-link_directories("C:/Program Files (x86)/EasyStr/lib")
-target_link_libraries(untitled1 PRIVATE easystr)
-```
-Now your file should look something like this :
-```cmake
-cmake_minimum_required(VERSION 4.0)
-project(untitled1 C)
-
-set(CMAKE_C_STANDARD 11)
-
-include_directories("C:/Program Files (x86)/EasyStr/include")
-link_directories("C:/Program Files (x86)/EasyStr/lib")
-
-add_executable(untitled1 main.c)
-
-target_link_libraries(untitled1 PRIVATE easystr)
-```
-
-7. Now if you try to use  `<EasyStr.h>` in your code, it won't work, duh...
-8. You have to `right-click` the `CMakeFile.txt` again, and `Reload CMake Project`.
-9. Now `#include <EasyStr.h>` works perfectly fine, check out the documentation for instructions on how to use the functions.
-
-### Option B - VS | Simple
-
-1. Create a new VS project, a `CMake Project`
-2. If you look into the folder named after your project you will see there the right `CMakeLists.txt` file.
-3. It will probably look something like this:
-```cmake
-cmake_minimum_required(VERSION 3.20)
-project(MyTestApp C)
-
-add_executable(MyTestApp MyTestApp.c)
-```
-4. Add the following lines:
-```cmake
-include_directories("C:/Program Files (x86)/EasyStr/include")
-link_directories("C:/Program Files (x86)/EasyStr/lib")
-target_link_libraries(MyTestApp PRIVATE easystr)
-```
-Now your file should look something like this :
-```cmake
-cmake_minimum_required(VERSION 3.20)
-project(MyTestApp C)
-
-include_directories("C:/Program Files (x86)/EasyStr/include")
-link_directories("C:/Program Files (x86)/EasyStr/lib")
-
-add_executable(MyTestApp MyTestApp.c)
-
-target_link_libraries(MyTestApp PRIVATE easystr)
-```
-5. Now `#include <EasyStr.h>` works perfectly fine, check out the documentation for instructions on how to use the functions.
-
-## Option C - VS | w/o CMake
-1. Let me start off saying that idrk why you would want to do this, now that that's out of the way.
-2. Create a simple C project.
-3. Now, `right-click` on the Project in the `Solution Explorer`, and select `Propreties`
-4. Add the include path `C:\Program Files (x86)\EasyStr\include` to **C/C++ → Additional Include Directories.** 
-5. Add the library path `C:\Program Files (x86)\EasyStr\lib` to **Linker → General → Additional Library Directories.**
-6. Add `easystr.lib` to **Linker → Input → Additional Dependencies.**
 ---
+
+## Usage
+
+### 3. Integrating EasyStr into Your Project
+
+#### Option A: CLion with CMake
+
+1. Create a new CLion project (this will include a `CMakeLists.txt` file)
+2. Your initial `CMakeLists.txt` will look similar to this:
+```cmake
+cmake_minimum_required(VERSION 4.0)
+project(untitled1 C)
+
+set(CMAKE_C_STANDARD 11)
+
+add_executable(untitled1 main.c)
+```
+
+3. Add the following configuration lines:
+```cmake
+include_directories("C:/Program Files (x86)/EasyStr/include")
+link_directories("C:/Program Files (x86)/EasyStr/lib")
+target_link_libraries(untitled1 PRIVATE easystr)
+```
+
+Your complete `CMakeLists.txt` should now look like this:
+```cmake
+cmake_minimum_required(VERSION 4.0)
+project(untitled1 C)
+
+set(CMAKE_C_STANDARD 11)
+
+include_directories("C:/Program Files (x86)/EasyStr/include")
+link_directories("C:/Program Files (x86)/EasyStr/lib")
+
+add_executable(untitled1 main.c)
+
+target_link_libraries(untitled1 PRIVATE easystr)
+```
+
+4. Right-click on `CMakeLists.txt` and select `Reload CMake Project`
+5. You can now use `#include <EasyStr.h>` in your source files
+
+#### Option B: Visual Studio with CMake
+
+1. Create a new Visual Studio CMake project
+2. Locate the `CMakeLists.txt` file in your project directory. It will look similar to:
+```cmake
+cmake_minimum_required(VERSION 3.20)
+project(MyTestApp C)
+
+add_executable(MyTestApp MyTestApp.c)
+```
+
+3. Add the following configuration lines:
+```cmake
+include_directories("C:/Program Files (x86)/EasyStr/include")
+link_directories("C:/Program Files (x86)/EasyStr/lib")
+target_link_libraries(MyTestApp PRIVATE easystr)
+```
+
+Your complete `CMakeLists.txt` should now look like this:
+```cmake
+cmake_minimum_required(VERSION 3.20)
+project(MyTestApp C)
+
+include_directories("C:/Program Files (x86)/EasyStr/include")
+link_directories("C:/Program Files (x86)/EasyStr/lib")
+
+add_executable(MyTestApp MyTestApp.c)
+
+target_link_libraries(MyTestApp PRIVATE easystr)
+```
+
+4. You can now use `#include <EasyStr.h>` in your source files
+
+#### Option C: Visual Studio without CMake
+
+For traditional Visual Studio projects without CMake:
+
+1. Create a new C project in Visual Studio
+2. Right-click on the project in Solution Explorer and select `Properties`
+3. Configure the include path:
+   - Navigate to **C/C++ → General → Additional Include Directories**
+   - Add: `C:\Program Files (x86)\EasyStr\include`
+4. Configure the library path:
+   - Navigate to **Linker → General → Additional Library Directories**
+   - Add: `C:\Program Files (x86)\EasyStr\lib`
+5. Link the library:
+   - Navigate to **Linker → Input → Additional Dependencies**
+   - Add: `easystr.lib`
+
+
+
+---
+
+## Documentation
+
+For the complete API reference, detailing all functions, parameters, and return types, please visit:
+
+**[📚 Full Documentation](https://github.com/DraghiAndreas/EasyStr/blob/master/docs/DOCUMENTATION.md)**
+
+---
+
+
+## License
+
+This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
+
+---
+
+## Contact
+
+**Andreas Draghi** - [@DraghiAndreas](https://github.com/DraghiAndreas)
+
+Project Link: [https://github.com/DraghiAndreas/EasyStr](https://github.com/DraghiAndreas/EasyStr)

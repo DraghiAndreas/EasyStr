@@ -3,10 +3,6 @@
 
 #include <stddef.h>
 
-typedef enum {UPPER,LOWER,CAP,SWAP} STRING_MODE;
-typedef enum {AL,DG,AN,UP,LOW,SPACE} CHR_MODE;
-typedef enum {RIGHT, LEFT, BOTH} TRIM_MODE  ;
-
 // --Character Type Checks--
 int EasyIsAlphaChr(const unsigned char chr);
 int EasyIsDigitChr(const unsigned char chr);

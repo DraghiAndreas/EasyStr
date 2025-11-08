@@ -153,14 +153,14 @@ Counts the number of non-overlapping occurrences of a substring in a string.
 
 Functions for finding characters or substrings.
 
-### `EasySearchChr(char *string, const char chr)`
+### `EasySearchChr(const char *string, const char chr)`
 Finds the **first** occurrence of a character in a string.
 * **Parameters:**
   * `string`: The string to search in.
   * `chr`: The character to find.
 * **Returns:** A pointer to the first occurrence of `chr` in `string`, or `NULL` if not found.
 
-### `EasyRSearchChr(char *string, const char chr)`
+### `EasyRSearchChr(const char *string, const char chr)`
 Finds the **last** occurrence of a character in a string.
 * **Parameters:**
   * `string`: The string to search in.
