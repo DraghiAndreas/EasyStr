@@ -1,8 +1,17 @@
 <img src="docs/media/EasyStr.gif" width="800" alt="EasyStr Logo">
 
-# EasyStr
 
-A lightweight, easy-to-use C library for simplified string manipulation and handling.
+<h1 align="center">EasyStr</h1>
+
+<p align="center">
+  <em>A lightweight, easy-to-use C library for simplified string manipulation and handling.
+</em>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/CMake-3.10%2B-blue?style=flat-square&logo=CMake" />
+  <img src="https://img.shields.io/badge/C-C99%2b-lightblue?style=flat-square&logo=c" />
+</p>
 
 ---
 

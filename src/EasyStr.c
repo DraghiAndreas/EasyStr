@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef enum {UPPER,LOWER,CAP,SWAP} STRING_MODE;
+typedef enum {AL,DG,AN,UP,LOW,SPACE} CHR_MODE;
+typedef enum {RIGHT, LEFT, BOTH} TRIM_MODE;
+
 static void efSwap(char* v1, char* v2) {
     if (v1==v2)return;
     *v1 = *v1 ^ *v2;
@@ -11,7 +15,6 @@ static void efSwap(char* v1, char* v2) {
     *v1 = *v1 ^ *v2;
 }
 
-//-----
 
 static int IsGeneralCaseChr(const unsigned char chr, CHR_MODE mode) {
     switch (mode) {
